@@ -1,17 +1,17 @@
-using TouhouFantasiaCheat.Commands.Interfaces;
-
 namespace TouhouFantasiaCheat.Commands
 {
-    public class VerboseCommand : ICommand
+    /// <summary>
+    /// Enables details about the running commands.
+    /// </summary>
+    public static class VerboseCommand
     {
-        public void Execute(string command = null)
+        public static bool VerboseEnabled = false;
+        /// <summary>
+        /// Indicate whether the command will show detailed output. 
+        /// </summary>
+        public static void Execute()
         {
-            throw new NotImplementedException();
-        }
-
-        public void PrintUsage()
-        {
-            Console.WriteLine("--verbose, -v            Shows commands actions while they are running");
+            VerboseEnabled = true;
         }
     }
 }

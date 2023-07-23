@@ -1,9 +1,4 @@
-﻿using TouhouFantasiaCheat.Cheats;
-using TouhouFantasiaCheat.Commands;
-using System.ComponentModel;
-using TouhouFantasiaCheat.Cheats.Enums;
-using System.Text;
-using TouhouFantasiaCheat.Helpers;
+﻿using TouhouFantasiaCheat.Commands;
 
 class Program
 {
@@ -14,90 +9,54 @@ class Program
         while (true)
         {
             var command = Console.ReadLine();
+            var argument = command?.Split(' ');
 
-            try
+            for (int i = 0; i < argument?.Length; i++)
             {
-                switch (command)
+                try
                 {
-                    case "-h":
-                    case "--help":
-                        new HelpCommand().PrintUsage();
-                        break;
-                    case "-e":
-                    case "enable":
-                        new EnableCommand().PrintUsage();
-                        break;
-                    case "-d":
-                    case "disable":
-                        new DisableCommand().PrintUsage();
-                        break;
-                    case "-v":
-                    case "--verbose":
-                        new VerboseCommand().PrintUsage();
-                        break;
-                    case "exit":
-                        return;
-                    default:
-                        if (IsEnableArgs(command))
-                        {
-                            var cmd = command.Split(' ')[1];//the command to be executed
-                            var cheat = EnumHelper.GetValueFromDescription<CheatEnum>(cmd);
-                            CheatManager.Execute(cheat);
+                    switch (argument[i])
+                    {
+                        case "-h":
+                        case "--help":
+                            HelpCommand.Execute();
                             break;
-                        }
-
-                        if (IsDisableArgs(command))
-                        {
-                            var cmd = command.Split(' ')[1];//the command to be executed
-                            var cheat = EnumHelper.GetValueFromDescription<CheatEnum>(cmd);
-                            CheatManager.Stop(cheat);
+                        case "-e":
+                        case "enable":
+                            EnableCommand.Execute(argument[i + 1]);
+                            i++;
                             break;
-                        }
-
-                        Console.WriteLine("This spell is unknow in gensoukyo lands!");
-                        Console.WriteLine("Unknown command: " + command);
-                        break;
+                        case "-d":
+                        case "disable":
+                            DisableCommand.Execute(argument[i + 1]);
+                            i++;
+                            break;
+                        case "-v":
+                        case "--verbose":
+                            VerboseCommand.Execute();
+                            break;
+                        case "exit":
+                            return;
+                        default:
+                            Console.WriteLine("This spell is unknow in gensoukyo lands!");
+                            Console.WriteLine("Unknown command: " + command);
+                            break;
+                    }
                 }
-            }
-            catch (System.ArgumentException e)
-            {
-                Console.WriteLine("It wasn't possible execute thet unkonwn command: " + command);
+                catch (System.ArgumentException e)
+                {
+                    Console.WriteLine("It wasn't possible execute thet unkonwn command: " + command);
+                    if (VerboseCommand.VerboseEnabled)
+                        Console.WriteLine("Unhandled error: " + e.Message);
+                }
             }
         }
     }
 
     /// <summary>
-    /// Verify whether argument is a valid one.
-    /// </summary>
-    /// <param name="argument">Argument to be validated</param>
-    /// <returns>True if it is a valid argument or false if it is not</returns>
-    public static bool IsEnableArgs(string argument)
-    {
-        var args = argument.Split(' ');
-        if (args is not null && args.FirstOrDefault() == "enable")
-            return true;
-
-        return false;
-    }
-
-    /// <summary>
-    /// Verify whether argument is a valid one.
-    /// </summary>
-    /// <param name="argument">Argument to be validated</param>
-    /// <returns>True if it is a valid argument or false if it is not</returns>
-    public static bool IsDisableArgs(string argument)
-    {
-        var args = argument.Split(' ');
-        if (args is not null && args.FirstOrDefault() == "disable")
-            return true;
-
-        return false;
-    }
-
-    /// <summary>
     /// Print main console banner.
     /// </summary>
-    public static void PrintBanner()
+    private static void PrintBanner()
     {
         Console.WriteLine("It's been hard to get through all the bullets, isn't mate!?");
         Console.WriteLine("No problem...");
