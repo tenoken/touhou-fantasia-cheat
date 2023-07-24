@@ -9,10 +9,8 @@ namespace TouhouFantasiaCheat.Cheats
     internal static class CheatBase
     {
         public static Process Process { get; private set; }
-        public static IntPtr PlayerAddress { get; private set; }
-        public static IntPtr SpellAddress { get; private set; }
-        public static IntPtr PowerAddress { get; private set; }
-        public static IntPtr GodModeAddress { get; private set; }
+        public static nint ModuleBaseAddress { get; private set; }
+        public static bool VerboseEnabled { get; set; }
 
         /// <summary>
         /// Main method that loads all the addresses to be used in cheats.
@@ -21,60 +19,22 @@ namespace TouhouFantasiaCheat.Cheats
         {
             try
             {
-
                 Process = Process.GetProcessesByName("TouhouFantasia")[0];
 
-                var moduleBaseAddress = GetModuleBaseAddress(Process, "UnityPlayer.dll");
-                PlayerAddress = GetPlayerLifeAddress((int)moduleBaseAddress);
-                SpellAddress = GetSpellAddress((int)moduleBaseAddress);
-                PowerAddress = GetPowerAddress((int)moduleBaseAddress);
-                GodModeAddress = GetGodModeAddress((int)moduleBaseAddress);
-                ReadPointer((int)GodModeAddress);
+                if (Process is null)
+                {
+                    Console.WriteLine("No touhou fantasia process found. Make sure whether the game is running and try again.");
+                    return;
+                }
+
+                ModuleBaseAddress = GetModuleBaseAddress(Process, "UnityPlayer.dll");
+                if (VerboseEnabled)
+                    Console.WriteLine("Base addres loaded successfuly.");
             }
             catch (System.Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine($"Unhandled error: {e.Message}");
             }
-        }
-
-        /// <summary>
-        /// Get player life counter address.
-        /// </summary>
-        /// <param name="moduleBaseAddress">Base addres of module</param>
-        /// <returns>A int pointer of player life memory address</returns>
-        private static IntPtr GetPlayerLifeAddress(int moduleBaseAddress)
-        {
-            return (IntPtr)ReadFromPointer((int)moduleBaseAddress + 0x01094D74, new[] { 0x30, 0x08, 0x54, 0x21C, 0xC, 0x10, 0x184 });
-        }
-
-        /// <summary>
-        /// Get spell cards counter address.
-        /// </summary>
-        /// <param name="moduleBaseAddress">Base addres of module</param>
-        /// <returns>A int pointer of player life memory addres</returns>
-        private static nint GetSpellAddress(int moduleBaseAddress)
-        {
-            return (IntPtr)ReadFromPointer((int)moduleBaseAddress + 0x01094D74, new[] { 0x30, 0x08, 0x54, 0x21C, 0xC, 0x10, 0x188 });
-        }
-
-        /// <summary>
-        /// Get shoot power address.
-        /// </summary>
-        /// <param name="moduleBaseAddress"></param>
-        /// <returns></returns>
-        private static nint GetPowerAddress(int moduleBaseAddress)
-        {
-            return (IntPtr)ReadFromPointer((int)moduleBaseAddress + 0x010979DC, new[] { 0x04, 0x04, 0x50, 0x18, 0x190 });
-        }
-
-        /// <summary>
-        /// Get "God Mode" address.
-        /// </summary>
-        /// <param name="moduleBaseAddress"></param>
-        /// <returns></returns>
-        private static nint GetGodModeAddress(int moduleBaseAddress)
-        {
-            return (IntPtr)ReadFromPointer((int)moduleBaseAddress + 0x01091924, new[] { 0x0, 0x208, 0x54, 0x21C, 0xC, 0x10, 0x1E8 });
         }
 
         /// <summary>
@@ -106,20 +66,36 @@ namespace TouhouFantasiaCheat.Cheats
         /// <returns>A int32 value</returns>
         public static int ReadFromPointer(int address, int[] offsets)
         {
-            //Console.WriteLine("----------");
-            //Console.WriteLine("Address: " + address);
+            if (VerboseEnabled)
+            {
+                Console.WriteLine("----------");
+                Console.WriteLine("Address: " + address);
+            }
+
             int ptr = ReadPointer(address);
             int realAddress = 0;
-            //Console.WriteLine($"Pointer returned as int: {ptr}, hex: {ptr:X}");
+
+            if (VerboseEnabled)
+                Console.WriteLine($"Pointer returned as int: {ptr}, hex: {ptr:X}");
+
             for (var i = 0; i < offsets.Length; ++i)
             {
-                //Console.WriteLine($"Adding offset: {offsets[i]:X} to Pointer: {ptr:X}");
+                if (VerboseEnabled)
+                    Console.WriteLine($"Adding offset: {offsets[i]:X} to Pointer: {ptr:X}");
+
                 realAddress = ptr + offsets[i];
                 ptr = ReadPointer(ptr + offsets[i]);
-                //Console.WriteLine($"Pointer returned as int: {ptr}, hex: {ptr:X}");
+
+                if (VerboseEnabled)
+                    Console.WriteLine($"Pointer returned as int: {ptr}, hex: {ptr:X}");
             }
-            //Console.WriteLine($"Final address: {realAddress:X}");
-            //Console.WriteLine("----------");
+
+            if (VerboseEnabled)
+            {
+                Console.WriteLine($"Final address: {realAddress:X}");
+                Console.WriteLine("----------");
+            }
+
             return realAddress;
         }
 
@@ -158,6 +134,22 @@ namespace TouhouFantasiaCheat.Cheats
             ReadProcessMemoryPInvoke.ReadProcessMemory((IntPtr)Process.Handle, (IntPtr)adress, _Value, (uint)IntPtr.Size, out bytesRead);
             ptrNext = BitConverter.ToInt32(_Value, 0);
             return ptrNext;
+        }
+
+        /// <summary>
+        /// Set verbose to true until the end of the command.
+        /// </summary>
+        internal static void SetVerbose()
+        {
+            VerboseEnabled = true;
+        }
+
+        /// <summary>
+        /// Set verbose to true until the end of the command.
+        /// </summary>
+        internal static void UnsetVerbose()
+        {
+            VerboseEnabled = false;
         }
     }
 }

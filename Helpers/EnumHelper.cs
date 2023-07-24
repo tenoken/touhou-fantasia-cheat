@@ -2,8 +2,17 @@ using System.ComponentModel;
 
 namespace TouhouFantasiaCheat.Helpers
 {
+    /// <summary>
+    /// Helper for enums.
+    /// </summary>
     public static class EnumHelper
     {
+        /// <summary>
+        /// Get description from enum stucture if it has description attribute.
+        /// </summary>
+        /// <param name="description"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static T GetValueFromDescription<T>(string description) where T : Enum
         {
             foreach (var field in typeof(T).GetFields())
@@ -21,8 +30,7 @@ namespace TouhouFantasiaCheat.Helpers
                 }
             }
 
-            throw new ArgumentException("Not found.", nameof(description));
-            // Or return default(T);
+            throw new ArgumentException("Cheat not found.", nameof(description));
         }
     }
 }

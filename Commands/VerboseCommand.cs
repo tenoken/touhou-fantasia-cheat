@@ -1,3 +1,5 @@
+using TouhouFantasiaCheat.Cheats;
+
 namespace TouhouFantasiaCheat.Commands
 {
     /// <summary>
@@ -12,6 +14,7 @@ namespace TouhouFantasiaCheat.Commands
         public static void Execute()
         {
             VerboseEnabled = true;
+            CheatBase.SetVerbose();
         }
     }
 }
