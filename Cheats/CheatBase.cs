@@ -13,7 +13,7 @@ namespace TouhouFantasiaCheat.Cheats
         public static bool VerboseEnabled { get; set; }
 
         /// <summary>
-        /// Main method that loads all the addresses to be used in cheats.
+        /// Main method that loads module base address.
         /// </summary>
         internal static void Load()
         {
