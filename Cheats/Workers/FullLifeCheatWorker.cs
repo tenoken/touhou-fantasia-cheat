@@ -3,7 +3,7 @@ namespace TouhouFantasiaCheat.Cheats.Workers
     /// <summary>
     /// Worker that handles full life cheat.
     /// </summary>
-    public static class FullLifeCheatWorker
+    public class FullLifeCheatWorker
     {
         /// <summary>
         /// Shows whether there is one running task.

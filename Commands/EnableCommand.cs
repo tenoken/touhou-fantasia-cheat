@@ -7,7 +7,7 @@ namespace TouhouFantasiaCheat.Commands
     /// <summary>
     /// Command to enable cheats.
     /// </summary>
-    public static class EnableCommand
+    public class EnableCommand
     {
         /// <summary>
         /// Enable the cheat.

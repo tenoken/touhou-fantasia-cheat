@@ -6,7 +6,7 @@ namespace TouhouFantasiaCheat.Cheats
     /// <summary>
     /// Infinite spell cards cheat.
     /// </summary>
-    public static class FullSpellCheat
+    public class FullSpellCheat
     {
         const Byte FULL_SPELL_VALUE = 0x08;
         private static nint _spellCardAddress;

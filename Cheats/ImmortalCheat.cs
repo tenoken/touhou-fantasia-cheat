@@ -6,7 +6,7 @@ namespace TouhouFantasiaCheat.Cheats
     /// <summary>
     /// Immortal player cheat.
     /// </summary>
-    public static class ImmortalCheat
+    public class ImmortalCheat
     {
         const uint IMMORTAL_BYTES_VALUE = 0xFFFFFFFF;
         private static nint _immortalAddress;

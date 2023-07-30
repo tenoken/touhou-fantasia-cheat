@@ -6,7 +6,7 @@ namespace TouhouFantasiaCheat.Cheats
     /// <summary>
     /// Infinite life cheat.
     /// </summary>
-    public static class FullLifeCheat
+    public class FullLifeCheat
     {
         const Byte FULL_LIFE_VALUE = 0x08;
         private static nint _playerAddress;
@@ -16,7 +16,10 @@ namespace TouhouFantasiaCheat.Cheats
         /// </summary>
         public static void Execute()
         {
+            //Initialize();
+            //if (_playerAddress == 0)
             _playerAddress = GetPlayerLifeAddress((int)CheatBase.ModuleBaseAddress);
+
             WriteProcessMemoryPInvoke.WriteMemory(CheatBase.Process.Id, _playerAddress, FULL_LIFE_VALUE);
         }
 
