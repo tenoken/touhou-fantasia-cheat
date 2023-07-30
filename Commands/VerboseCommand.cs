@@ -14,7 +14,11 @@ namespace TouhouFantasiaCheat.Commands
         public static void Execute()
         {
             VerboseEnabled = true;
-            CheatBase.SetVerbose();
+        }
+
+        internal static void Disable()
+        {
+            VerboseEnabled = false;
         }
     }
 }

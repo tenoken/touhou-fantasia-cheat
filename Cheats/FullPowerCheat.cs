@@ -1,3 +1,4 @@
+using TouhouFantasiaCheat.Commands;
 using TouhouFantasiaCheat.PInvokes;
 
 namespace TouhouFantasiaCheat.Cheats
@@ -27,7 +28,7 @@ namespace TouhouFantasiaCheat.Cheats
         /// <returns></returns>
         private static nint GetPowerAddress(int moduleBaseAddress)
         {
-            return (IntPtr)CheatBase.ReadFromPointer((int)moduleBaseAddress + 0x010979DC, new[] { 0x04, 0x04, 0x50, 0x18, 0x190 });
+            return (IntPtr)CheatBase.ReadFromPointer((int)moduleBaseAddress + 0x010979DC, new[] { 0x04, 0x04, 0x50, 0x18, 0x190 }, VerboseCommand.VerboseEnabled);
         }
     }
 }

@@ -1,3 +1,4 @@
+using TouhouFantasiaCheat.Commands;
 using TouhouFantasiaCheat.PInvokes;
 
 namespace TouhouFantasiaCheat.Cheats
@@ -27,7 +28,7 @@ namespace TouhouFantasiaCheat.Cheats
         /// <returns></returns>
         private static nint GetGodModeAddress(int moduleBaseAddress)
         {
-            return (IntPtr)CheatBase.ReadFromPointer((int)moduleBaseAddress + 0x01091924, new[] { 0x0, 0x208, 0x54, 0x21C, 0xC, 0x10, 0x1E8 });
+            return (IntPtr)CheatBase.ReadFromPointer((int)moduleBaseAddress + 0x01091924, new[] { 0x0, 0x208, 0x54, 0x21C, 0xC, 0x10, 0x1E8 }, VerboseCommand.VerboseEnabled);
         }
     }
 }

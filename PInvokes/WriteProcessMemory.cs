@@ -36,7 +36,7 @@ namespace TouhouFantasiaCheat.PInvokes
             }
             else
             {
-                Console.WriteLine("Write failed");
+                Console.WriteLine($"Write failed on following memory address: {address:X}");
             }
         }
 
@@ -61,11 +61,11 @@ namespace TouhouFantasiaCheat.PInvokes
             // Check if the write was successful
             if (bytesWritten.ToInt32() == buffer.Length)
             {
-                
+
             }
             else
             {
-                Console.WriteLine("Write failed");
+                Console.WriteLine($"Write failed on following memory address: {address:X}");
             }
         }
     }

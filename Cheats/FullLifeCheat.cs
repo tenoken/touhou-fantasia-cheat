@@ -1,3 +1,4 @@
+using TouhouFantasiaCheat.Commands;
 using TouhouFantasiaCheat.PInvokes;
 
 namespace TouhouFantasiaCheat.Cheats
@@ -26,7 +27,7 @@ namespace TouhouFantasiaCheat.Cheats
         /// <returns>A int pointer of player life memory address</returns>
         private static IntPtr GetPlayerLifeAddress(int moduleBaseAddress)
         {
-            return (IntPtr)CheatBase.ReadFromPointer((int)moduleBaseAddress + 0x01094D74, new[] { 0x30, 0x08, 0x54, 0x21C, 0xC, 0x10, 0x184 });
+            return (IntPtr)CheatBase.ReadFromPointer((int)moduleBaseAddress + 0x01094D74, new[] { 0x30, 0x08, 0x54, 0x21C, 0xC, 0x10, 0x184 }, VerboseCommand.VerboseEnabled);
         }
     }
 }

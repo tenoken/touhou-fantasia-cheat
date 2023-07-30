@@ -10,7 +10,7 @@ namespace TouhouFantasiaCheat.Cheats
     {
         public static Process Process { get; private set; }
         public static nint ModuleBaseAddress { get; private set; }
-        public static bool VerboseEnabled { get; set; }
+        //public static bool VerboseEnabled { get; set; }
 
         /// <summary>
         /// Main method that loads module base address.
@@ -28,8 +28,8 @@ namespace TouhouFantasiaCheat.Cheats
                 }
 
                 ModuleBaseAddress = GetModuleBaseAddress(Process, "UnityPlayer.dll");
-                if (VerboseEnabled)
-                    Console.WriteLine("Base addres loaded successfuly.");
+                // if (VerboseEnabled)
+                //     Console.WriteLine("Base addres loaded successfuly.");
             }
             catch (System.Exception e)
             {
@@ -64,9 +64,9 @@ namespace TouhouFantasiaCheat.Cheats
         /// <param name="address">Base addres of a module</param>
         /// <param name="offsets">Offset array to be addesd</param>
         /// <returns>A int32 value</returns>
-        public static int ReadFromPointer(int address, int[] offsets)
+        public static int ReadFromPointer(int address, int[] offsets, bool verbose = false)
         {
-            if (VerboseEnabled)
+            if (verbose)
             {
                 Console.WriteLine("----------");
                 Console.WriteLine("Address: " + address);
@@ -75,27 +75,28 @@ namespace TouhouFantasiaCheat.Cheats
             int ptr = ReadPointer(address);
             int realAddress = 0;
 
-            if (VerboseEnabled)
+            if (verbose)
                 Console.WriteLine($"Pointer returned as int: {ptr}, hex: {ptr:X}");
 
             for (var i = 0; i < offsets.Length; ++i)
             {
-                if (VerboseEnabled)
+                if (verbose)
                     Console.WriteLine($"Adding offset: {offsets[i]:X} to Pointer: {ptr:X}");
 
                 realAddress = ptr + offsets[i];
                 ptr = ReadPointer(ptr + offsets[i]);
 
-                if (VerboseEnabled)
+                if (verbose)
                     Console.WriteLine($"Pointer returned as int: {ptr}, hex: {ptr:X}");
             }
 
-            if (VerboseEnabled)
+            if (verbose)
             {
                 Console.WriteLine($"Final address: {realAddress:X}");
                 Console.WriteLine("----------");
             }
 
+            //UnsetVerbose();
             return realAddress;
         }
 
@@ -139,17 +140,17 @@ namespace TouhouFantasiaCheat.Cheats
         /// <summary>
         /// Set verbose to true until the end of the command.
         /// </summary>
-        internal static void SetVerbose()
-        {
-            VerboseEnabled = true;
-        }
+        // internal static void SetVerbose()
+        // {
+        //     VerboseEnabled = true;
+        // }
 
-        /// <summary>
-        /// Set verbose to true until the end of the command.
-        /// </summary>
-        internal static void UnsetVerbose()
-        {
-            VerboseEnabled = false;
-        }
+        // /// <summary>
+        // /// Set verbose to true until the end of the command.
+        // /// </summary>
+        // internal static void UnsetVerbose()
+        // {
+        //     VerboseEnabled = false;
+        // }
     }
 }

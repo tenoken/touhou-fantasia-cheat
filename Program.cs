@@ -1,4 +1,5 @@
-﻿using TouhouFantasiaCheat.Commands;
+﻿using TouhouFantasiaCheat.Cheats;
+using TouhouFantasiaCheat.Commands;
 
 class Program
 {
@@ -9,48 +10,75 @@ class Program
         while (true)
         {
             var command = Console.ReadLine();
-            var argument = command?.Split(' ');
+            var arguments = command?.Split(' ');
 
-            for (int i = 0; i < argument?.Length; i++)
+            Setup(command);
+            RunCommands(arguments);
+            CleanUp();
+        }
+    }
+
+    private static void RunCommands(string[] arguments)
+    {
+
+        for (int i = 0; i < arguments?.Length; i++)
+        {
+            try
             {
-                try
+                switch (arguments[i])
                 {
-                    switch (argument[i])
-                    {
-                        case "-h":
-                        case "--help":
-                            HelpCommand.Execute();
-                            break;
-                        case "-e":
-                        case "enable":
-                            EnableCommand.Execute(argument[i + 1]);
-                            i++;
-                            break;
-                        case "-d":
-                        case "disable":
-                            DisableCommand.Execute(argument[i + 1]);
-                            i++;
-                            break;
-                        case "-v":
-                        case "--verbose":
-                            VerboseCommand.Execute();
-                            break;
-                        case "exit":
-                            return;
-                        default:
+                    case "-h":
+                    case "--help":
+                        HelpCommand.Execute();
+                        break;
+                    case "-e":
+                    case "enable":
+                        EnableCommand.Execute(arguments[i + 1]);
+                        i++;
+                        break;
+                    case "-d":
+                    case "disable":
+                        DisableCommand.Execute(arguments[i + 1]);
+                        i++;
+                        break;
+                    case "-v":
+                    case "--verbose":
+                        //VerboseCommand.Execute();
+                        break;
+                    case "exit":
+                        return;
+                    default:
+                        if (!string.IsNullOrEmpty(arguments[i]))
+                        {
                             Console.WriteLine("This spell is unknow in gensoukyo lands!");
-                            Console.WriteLine("Unknown command: " + command);
-                            break;
-                    }
-                }
-                catch (System.ArgumentException e)
-                {
-                    Console.WriteLine("It wasn't possible execute thet unkonwn command: " + command);
-                    if (VerboseCommand.VerboseEnabled)
-                        Console.WriteLine("Unhandled error: " + e.Message);
+                            Console.WriteLine("Unknown command: " + arguments[i]);
+                        }
+                        break;
                 }
             }
+            catch (System.ArgumentException e)
+            {
+                Console.WriteLine("It wasn't possible execute thet unkonwn command: " + arguments[i]);
+                if (VerboseCommand.VerboseEnabled)
+                    Console.WriteLine("Unhandled error: " + e.Message);
+            }
         }
+    }
+
+    private static void Setup(string command)
+    {
+        if (CheatManager.IsCommandRunning(command))
+            return;
+
+        if ((command.Contains("-v") || command.Contains("--verbose")) &&
+            !command.Contains("-d") && !command.Contains("disable"))
+            VerboseCommand.Execute();
+    }
+
+    private static void CleanUp()
+    {
+        Task.Delay(500);
+        VerboseCommand.Disable();
     }
 
     /// <summary>
