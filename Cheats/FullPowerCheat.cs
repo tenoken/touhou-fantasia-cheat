@@ -6,7 +6,7 @@ namespace TouhouFantasiaCheat.Cheats
     /// <summary>
     /// Maximum power cheat.
     /// </summary>
-    public static class FullPowerCheat
+    public class FullPowerCheat
     {
         const int FULL_POWER_VALUE = 400;
         private static nint _powerAddress;

@@ -1,11 +1,9 @@
-using TouhouFantasiaCheat.Cheats;
-
 namespace TouhouFantasiaCheat.Commands
 {
     /// <summary>
     /// Enables details about the running commands.
     /// </summary>
-    public static class VerboseCommand
+    public class VerboseCommand
     {
         public static bool VerboseEnabled = false;
         /// <summary>
@@ -16,6 +14,9 @@ namespace TouhouFantasiaCheat.Commands
             VerboseEnabled = true;
         }
 
+        /// <summary>
+        /// Indicate whether the command will not show detailed output. 
+        /// </summary>
         internal static void Disable()
         {
             VerboseEnabled = false;

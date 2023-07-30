@@ -7,7 +7,7 @@ namespace TouhouFantasiaCheat.Cheats
     /// <summary>
     /// Manager of all cheats.
     /// </summary>
-    public static class CheatManager
+    public class CheatManager
     {
         private static List<CheatEnum> _runningCheats = new List<CheatEnum>();
         /// <summary>

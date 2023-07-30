@@ -1,8 +1,9 @@
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 namespace TouhouFantasiaCheat.PInvokes
 {
-    public class WriteProcessMemoryPInvoke
+    public class WriteProcessMemoryPInvoke : IDisposable
     {
         // Import the WriteProcessMemory function from the Windows API
         [DllImport("kernel32.dll")]
@@ -10,6 +11,9 @@ namespace TouhouFantasiaCheat.PInvokes
 
         const uint PROCESS_VM_WRITE = 0x0020;
         const uint PROCESS_VM_OPERATION = 0x0008;
+
+        public static IntPtr ProcessHandle { get; set; }
+        private bool disposedValue;
 
         /// <summary>
         /// Write in process memomory.
@@ -23,11 +27,17 @@ namespace TouhouFantasiaCheat.PInvokes
             byte[] buffer = new byte[] { byteValue };
 
             // Open the process with the specified access
-            IntPtr processHandle = OpenProcessPInvoke.OpenProcess(PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, processId);
+            if (ProcessHandle == 0)
+            {
+                using (var pinvoke = new OpenProcessPInvoke())
+                {
+                    ProcessHandle = OpenProcessPInvoke.OpenProcess(PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, processId);
+                }
+            }
 
             // Write the data to the process's memory
             IntPtr bytesWritten;
-            WriteProcessMemory(processHandle, address, buffer, (uint)buffer.Length, out bytesWritten);
+            WriteProcessMemory(ProcessHandle, address, buffer, (uint)buffer.Length, out bytesWritten);
 
             // Check if the write was successful
             if (bytesWritten.ToInt32() == buffer.Length)
@@ -52,11 +62,17 @@ namespace TouhouFantasiaCheat.PInvokes
             byte[] buffer = bytes;
 
             // Open the process with the specified access
-            IntPtr processHandle = OpenProcessPInvoke.OpenProcess(PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, processId);
+            if (ProcessHandle == 0)
+            {
+                using (var pinvoke = new OpenProcessPInvoke())
+                {
+                    ProcessHandle = OpenProcessPInvoke.OpenProcess(PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, processId);
+                }
+            }
 
             // Write the data to the process's memory
             IntPtr bytesWritten;
-            WriteProcessMemory(processHandle, address, buffer, (uint)buffer.Length, out bytesWritten);
+            WriteProcessMemory(ProcessHandle, address, buffer, (uint)buffer.Length, out bytesWritten);
 
             // Check if the write was successful
             if (bytesWritten.ToInt32() == buffer.Length)
@@ -67,6 +83,28 @@ namespace TouhouFantasiaCheat.PInvokes
             {
                 Console.WriteLine($"Write failed on following memory address: {address:X}");
             }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects)
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -3,7 +3,7 @@ namespace TouhouFantasiaCheat.Commands
     /// <summary>
     /// Print all possible commands of this tool.
     /// </summary>
-    public static class HelpCommand
+    public class HelpCommand
     {
         /// <summary>
         /// Execute the command.

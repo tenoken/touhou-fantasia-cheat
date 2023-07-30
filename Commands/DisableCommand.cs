@@ -7,12 +7,12 @@ namespace TouhouFantasiaCheat.Commands
     /// <summary>
     /// Command to disable cheats.
     /// </summary>
-    public static class DisableCommand
+    public class DisableCommand
     {
         /// <summary>
         /// Disable the cheat if it is running.
         /// </summary>
-        /// <param name="command"></param>
+        /// <param name="command">Cheat to be disabled</param>
         public static void Execute(string command)
         {
             if (!IsValidCommand(command))
@@ -25,11 +25,6 @@ namespace TouhouFantasiaCheat.Commands
             Console.WriteLine("Example: disable fulllife");
         }
 
-        /// <summary>
-        /// Verify whether inputed command is valid.
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns>True if the command is valid or false if is not</returns>
         private static bool IsValidCommand(string command)
         {
             try

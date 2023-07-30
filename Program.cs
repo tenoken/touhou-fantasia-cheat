@@ -43,9 +43,9 @@ class Program
                         break;
                     case "-v":
                     case "--verbose":
-                        //VerboseCommand.Execute();
                         break;
                     case "exit":
+                        System.Environment.Exit(0);
                         return;
                     default:
                         if (!string.IsNullOrEmpty(arguments[i]))
